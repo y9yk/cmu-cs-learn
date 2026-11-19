@@ -57,3 +57,13 @@ test('예전 GitHub Pages 주소만 새 학습실로 보내고 query/hash를 보
  assert.equal(legacyDestination({...base,hostname:'localhost'}),null);
  assert.equal(legacyDestination({...base,pathname:'/projects/cmu-learn/'}),null);
 });
+const {videoEmbedUrl}=require('../docs/study.js');
+test('개별 영상은 올바른 ID와 공식 CC 파라미터만 허용한다',()=>{
+ const url=new URL(videoEmbedUrl('w05Mk2tjl_U',42));
+ assert.equal(url.hostname,'www.youtube-nocookie.com');
+ assert.equal(url.pathname,'/embed/w05Mk2tjl_U');
+ assert.equal(url.searchParams.get('cc_load_policy'),'1');
+ assert.equal(url.searchParams.get('start'),'42');
+ assert.equal(videoEmbedUrl('../escaped'),null);
+ assert.equal(new URL(videoEmbedUrl('w05Mk2tjl_U',-1)).searchParams.has('start'),false);
+});

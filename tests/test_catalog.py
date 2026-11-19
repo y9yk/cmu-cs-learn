@@ -45,3 +45,25 @@ class CatalogTest(unittest.TestCase):
   self.assertEqual(set(re.findall(r'data-play="([^"]+)"',html)),set(expected.values()))
   self.assertIn('frame-src https://www.youtube-nocookie.com',html)
   self.assertNotIn('src="https://www.youtube-nocookie.com',html)
+ def test_individual_official_video_inventory_is_rendered_without_preloading(self):
+  video_index=json.loads((ROOT/'video-index.json').read_text())
+  all_videos={x['id'] for xs in video_index.values() for x in xs}
+  self.assertEqual(len(all_videos),21)
+  html=(ROOT/'docs/index.html').read_text()
+  self.assertEqual(set(re.findall(r'data-video-option="([^"]+)"',html)),all_videos)
+  self.assertEqual(set(re.findall(r'data-video-notes="([^"]+)"',html)),all_videos)
+  self.assertIn('플레이어의 CC 버튼',html)
+  self.assertNotIn('<iframe',html)
+ def test_notes_are_exact_video_matches_and_show_documented_basis(self):
+  import build
+  videos,notes=build.read_lessons()
+  html=(ROOT/'docs/index.html').read_text()
+  self.assertGreaterEqual(len(notes),20)
+  for (course,video),note in notes.items():
+   self.assertTrue(any(row['id']==video for row in videos[course]))
+   self.assertTrue(note['evidence'] and note['references'])
+   self.assertIn(f'data-video-notes="{video}"',html)
+  captions=[v for rows in videos.values() for v in rows if v['english_cc']=='confirmed']
+  premieres=[v for rows in videos.values() for v in rows if v['availability']=='premiere']
+  self.assertEqual(len(captions),19)
+  self.assertEqual(len(premieres),2)
