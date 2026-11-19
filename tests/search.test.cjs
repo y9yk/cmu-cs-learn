@@ -49,3 +49,11 @@ test('노트는 유효한 과목만 보존하고 브라우저 입력 길이를 �
  assert.equal(courseCount(restored,available),1);
  assert.deepEqual(nextAction(courses,restored),{id:'11-768',step:'watch',resume:true});
 });
+const {legacyDestination}=require('../docs/study.js');
+test('예전 GitHub Pages 주소만 새 학습실로 보내고 query/hash를 보존한다',()=>{
+ const base={protocol:'https:',hostname:'yongkilee.com',pathname:'/cmu-cs-learn/',search:'?a=1',hash:'#course-11-768'};
+ assert.equal(legacyDestination(base),'https://yongkilee.com/projects/cmu-learn/?a=1#course-11-768');
+ assert.equal(legacyDestination({...base,hostname:'y9yk.github.io',pathname:'/cmu-cs-learn'}),'https://yongkilee.com/projects/cmu-learn/?a=1#course-11-768');
+ assert.equal(legacyDestination({...base,hostname:'localhost'}),null);
+ assert.equal(legacyDestination({...base,pathname:'/projects/cmu-learn/'}),null);
+});
