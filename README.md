@@ -2,6 +2,8 @@
 
 카네기멜론에서 공개하는 컴퓨터과학 강의를 관심 분야와 학습 목표에 맞춰 찾는 비공식 인덱스입니다. 2026-11-19에 [CMU 공식 강의 목록](https://www.cs.cmu.edu/learn/)을 확인했습니다. YouTube 공개 과목 8개와 2027년 1월 공개 예정 과목 5개를 구분했습니다. 영상을 무료로 보는 것과 정규 수강·인증은 별개이며, 자가 학습 교재와 AI 튜터는 공식 안내상 이후 공개 예정입니다.
 
+**[학습실 바로가기](https://yongkilee.com/projects/cmu-learn/)**
+
 ## 추천 학습 경로
 
 | 목표 | 추천 순서 | 남길 결과물 |
@@ -33,9 +35,20 @@
 - **17-619** Product Management Essentials
 - **17-627** Requirements for Embedded Systems
 
-## 검색 페이지 사용
+## 학습실 사용
 
-`docs/index.html`을 브라우저로 열거나, 저장소 루트에서 `python3 -m http.server 8000 --directory docs` 실행 후 `http://localhost:8000`을 여세요. 한·영 과목명, 과목 코드, 교수와 주제를 검색할 수 있고 주제·공개 상태·완료 상태도 함께 거를 수 있습니다. 완료 표시는 저장을 허용한 같은 브라우저에만 남습니다. 계정, 서버, 분석 도구에 학습 기록을 보내지 않습니다.
+저장소 루트에서 `python3 -m http.server 8000 --directory docs` 실행 후 `http://localhost:8000`을 여세요. 한국어·영어 과목명, 과목 코드, 교수와 주제로 검색하고, 주제·공개 여부·학습 상태를 함께 거를 수 있습니다.
+
+- **이어서 학습:** 마지막으로 연 공개 과목에서 체크하지 않은 다음 단계(공식 강의, 미니 실습, 복습 노트)를 엽니다.
+- **페이지 안에서 강의 보기:** 8개 공개 과목은 CMU가 직접 연결한 YouTube 공식 재생목록을 사용합니다. 플레이어는 버튼을 누를 때만 개인 정보 보호 강화 모드로 불러오며, YouTube가 재생을 제한할 때는 원본 링크를 사용할 수 있습니다.
+- **진도와 노트:** 강의 시청은 자동으로 기록하지 않습니다. 독학 체크리스트에 직접 표시하며, 진행과 복습 노트는 같은 브라우저에만 저장합니다. 예전 진도는 같은 도메인과 브라우저에서 이어지지만 서로 다른 도메인 간 브라우저 저장소는 공유되지 않습니다.
+
+### 학습실 디자인 참고
+
+- [CLASS101](https://blog.class101.net/press_250421/): 첫 화면에서 직전 과목으로 복귀.
+- [Open edX](https://edx.readthedocs.io/projects/open-edx-learner-guide/en/stable/SFD_start_course.html): 과목 목차와 다시 시작할 위치를 나란히 제공.
+- [Coursera](https://www.coursera.support/s/article/learner-000002219?language=en_US): 목표별 학습 경로와 진도를 분리.
+- [Moodle](https://docs.moodle.org/503/en/course/report/progress/index): 활동별 수동 완료 표시.
 
 GitHub Pages를 켜려면 저장소 **Settings → Pages → Deploy from a branch → main → /docs → Save**를 선택하세요. 설정 방식은 [GitHub 공식 문서](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)를 참고하세요.
 

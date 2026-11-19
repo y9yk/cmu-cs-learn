@@ -16,3 +16,36 @@ test('완료 과목을 실제 저장 상태로 거른다',()=>{
  assert.equal(matches(c,{q:'agents',track:'all',progress:'open',seen:new Set(['11-768'])}),false);
 });
 test('한글 조합 및 하이픈을 정규화한다',()=>assert.equal(normalize('한글–A   B'),'한글 a b'));
+const {loadStudy,toggleStep,nextAction,courseCount}=require('../docs/study.js');
+const available={id:'11-768',status:'available'}, planned={id:'11-777',status:'planned'};
+const courses=[available,planned,{id:'17-645',status:'available'}];
+test('기존 과목 완료 기록을 체크리스트에 보존한다',()=>{
+ const state=loadStudy(['11-768','unknown'],null,courses);
+ assert.equal(courseCount(state,available),3);
+ assert.equal(state.last,null);
+});
+test('다시 열면 마지막 과목의 다음 미완료 활동으로 이어간다',()=>{
+ const state=loadStudy([],null,courses);
+ toggleStep(state,available,'watch');
+ const restored=loadStudy([],JSON.parse(JSON.stringify(state)),courses);
+ assert.deepEqual(nextAction(courses,restored),{id:'11-768',step:'practice',resume:true});
+});
+test('공개 예정 과목을 완료하거나 이어보기 대상으로 만들지 않는다',()=>{
+ const state=loadStudy([], {last:'11-777',steps:{'11-777':['watch'],'unknown':['practice']}},courses);
+ assert.equal(toggleStep(state,planned,'watch'),false);
+ assert.equal(courseCount(state,planned),0);
+ assert.deepEqual(nextAction(courses,state),{id:'11-768',step:'watch',resume:false});
+});
+test('완료한 과목은 다음 공개 과목을 추천하며 모두 완료하면 종료한다',()=>{
+ const state=loadStudy(['11-768'],{last:'11-768'},courses);
+ assert.deepEqual(nextAction(courses,state),{id:'17-645',step:'watch',resume:false});
+ for(const k of ['watch','practice','reflect']) toggleStep(state,courses[2],k);
+ assert.equal(nextAction(courses,state),null);
+});
+test('노트는 유효한 과목만 보존하고 브라우저 입력 길이를 지킨다',()=>{
+ const restored=loadStudy([],JSON.parse(JSON.stringify({last:'11-768',steps:{'11-768':['practice','practice','bogus']},notes:{'11-768':'가'.repeat(2200),'11-777':'not available','unknown':'no'}})),courses);
+ assert.equal(restored.notes['11-768'].length,2000);
+ assert.deepEqual(Object.keys(restored.notes),['11-768']);
+ assert.equal(courseCount(restored,available),1);
+ assert.deepEqual(nextAction(courses,restored),{id:'11-768',step:'watch',resume:true});
+});
